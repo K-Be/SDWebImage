@@ -12,6 +12,8 @@
 #error SDWebImage is ARC only. Either turn on ARC for the project or use -fobjc-arc flag
 #endif
 
+//TODO: добавить возможность переопределения этого метода, например, присвоением указателя на функцию
+
 inline UIImage *SDScaledImageForKey(NSString *key, UIImage *image)
 {
     if ([image.images count] > 0)
@@ -29,19 +31,12 @@ inline UIImage *SDScaledImageForKey(NSString *key, UIImage *image)
     {
         if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)])
         {
-            CGFloat scale = 1.0;
-            if (key.length >= 8)
-            {
-                // Search @2x. at the end of the string, before a 3 to 4 extension length (only if key len is 8 or more @2x. + 4 len ext)
-                NSRange range = [key rangeOfString:@"@2x." options:0 range:NSMakeRange(key.length - 8, 5)];
-                if (range.location != NSNotFound)
-                {
-                    scale = 2.0;
-                }
-            }
-            
-            UIImage *scaledImage = [[UIImage alloc] initWithCGImage:image.CGImage scale:scale orientation:image.imageOrientation];
-            image = scaledImage;
+            CGFloat scale = [UIScreen mainScreen].scale;
+           if (scale != image.scale)
+           {
+              UIImage *scaledImage = [[UIImage alloc] initWithCGImage:image.CGImage scale:scale orientation:image.imageOrientation];
+              image = scaledImage;
+           }
         }
         return image;
     }
