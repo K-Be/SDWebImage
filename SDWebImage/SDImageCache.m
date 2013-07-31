@@ -71,6 +71,10 @@ static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
                                                  selector:@selector(cleanDisk)
                                                      name:UIApplicationWillTerminateNotification
                                                    object:nil];
+       [[NSNotificationCenter defaultCenter] addObserver:self
+                                                selector:@selector(cleanDisk)
+                                                    name:UIApplicationWillResignActiveNotification
+                                                  object:nil];
 #endif
     }
 
