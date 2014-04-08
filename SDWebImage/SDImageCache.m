@@ -419,8 +419,11 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     __block UIBackgroundTaskIdentifier bgTask = [application beginBackgroundTaskWithExpirationHandler:^{
         // Clean up any unfinished task business by marking where you
         // stopped or ending the task outright.
-        [application endBackgroundTask:bgTask];
-        bgTask = UIBackgroundTaskInvalid;
+       if (bgTask != UIBackgroundTaskInvalid)
+       {
+          [application endBackgroundTask:bgTask];
+          bgTask = UIBackgroundTaskInvalid;
+       }
     }];
 
     // Start the long-running task and return immediately.
@@ -428,8 +431,11 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         // Do the work associated with the task, preferably in chunks.
         [self cleanDisk];
 
-        [application endBackgroundTask:bgTask];
-        bgTask = UIBackgroundTaskInvalid;
+       if (bgTask != UIBackgroundTaskInvalid)
+       {
+          [application endBackgroundTask:bgTask];
+          bgTask = UIBackgroundTaskInvalid;
+       }
     });
 }
 
