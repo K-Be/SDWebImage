@@ -188,8 +188,19 @@
                     }
                 }
             }];
+           
+           __weak typeof(self) selfWeak = self;
             operation.cancelBlock = ^{
                 [subOperation cancel];
+               if (selfWeak && weakOperation)
+               {
+                  typeof(selfWeak) selfStrong = selfWeak;
+                  typeof(weakOperation) operationStrong = weakOperation;
+                  @synchronized (selfStrong.runningOperations) {
+                     [selfStrong.runningOperations removeObject:operationStrong];
+                  }
+               }
+               
             };
         }
         else if (image) {
